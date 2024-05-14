@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" integrity="sha512-jnSuA4Ss2PkkikSOLtYs8BlYIeeIK1h99ty4YfvRPAlzr377vr3CXDb7sb7eEEBYjDtcYj+AjBH3FLv5uSJuXg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>eartiaan</title>
+    <link rel="stylesheet" href="index.css" />
+    <link rel="shortcut icon" href="text.jpg" type="image/x-icon" />
+    <style>
+      #overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 998;
+      }
+      #shareWindow {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        max-width: 90%;
+        background: linear-gradient(to bottom right, #20B2AA, #157F7F);
+        -webkit-animation: colorAnimation 3s infinite alternate;
+        animation: colorAnimation 3s infinite alternate;
+        border: 1px solid #000000;
+        opacity: 0.95;
+        z-index: 999;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        border-radius: 25px 25px;
+        pointer-events: none;
+      }
+      #closeShareBtn {
+        background: none;
+        border: none;
+        font-size: 20px;
+        font-weight: bold;
+        color: #333;
+        cursor: pointer;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        transition: color 0.3s ease-in-out;
+        pointer-events: all;
+      }
+      #closeShareBtn:hover {
+        color: #f44336;
+      }
+      #copyLinkBtn {
+        background: linear-gradient(to bottom right, #20B2AA, #157F7F);
+        -webkit-animation: colorAnimation 3s infinite alternate;
+        animation: colorAnimation 3s infinite alternate;
+        color: #fff;
+        padding: 10px;
+        border: none;
+        cursor: pointer;
+        margin-right: 10px;
+        border-radius: 4px;
+        transition: background-color 0.3s ease-in-out;
+        pointer-events: all;
+      }
+      #copyLinkBtn:hover {
+        font-weight: bolder;
+        background-color: #45a049;
+      }
+      .copied-popup {
+        display: flex;
+        position: fixed;
+        height: 50px;
+        width: 300px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: linear-gradient(to bottom right, #20B2AA, #157F7F);
+        -webkit-animation: colorAnimation 3s infinite alternate; 
+        animation: colorAnimation 3s infinite alternate;
+        color: hsl(0, 0%, 100%); 
+        padding: 10px;
+        border-radius: 5px;
+        z-index: 999; 
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        pointer-events: none;
+      }
+      .link-copied-message {
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 100px;
+      }
+      .close-link-copied-message {
+        background: none;
+        border: none;
+        font-size: 20px;
+        font-weight: bold;
+        color: #333;
+        cursor: pointer;
+        position: absolute;
+        top: -2px;
+        right: 10px;
+        transition: color 0.3s ease-in-out;
+        pointer-events: all;
+      }
+      .close-link-copied-message:hover {
+        color: #f44336;
+      }
+    </style>
+    <script>
+      $(document).ready(function(){
+        function openShareWindow() {
+          var shareURL = 'https://www.eartiaan.tech';
+          var overlay = $('<div id="overlay"></div>');
+          $('body').append(overlay);
+          var shareWindow = $('<div id="shareWindow"></div>');
+          $('body').append(shareWindow);
+          shareWindow.html(`
+            <button id="closeShareBtn">&times;</button>
+            <h3>Share our Website</h3>
+            <input type="text" id="shareLink" value="${shareURL}" readonly>
+            <button id="copyLinkBtn">Copy Link</button>
+          `);
+          $('#closeShareBtn', shareWindow).click(function() {
+            shareWindow.remove();
+            overlay.remove();
+          });
+          $('#copyLinkBtn', shareWindow).click(function() {
+            var linkToCopy = $('#shareLink', shareWindow);
+            linkToCopy.select();
+            document.execCommand('copy');
+            shareWindow.remove();
+            overlay.remove();
+            var copiedPopup = $('<div class="copied-popup">Link Copied, you can now share it</div>');
+            $('body').append(copiedPopup);
+            var closeLinkCopiedMessage = $('<button class="close-link-copied-message">&times</button>');
+            copiedPopup.append(closeLinkCopiedMessage);
+            closeLinkCopiedMessage.click(function() {
+              copiedPopup.remove();
+            });
+            setTimeout(function(){
+              copiedPopup.remove();
+            }, 5000);
+          });
+          overlay.show();
+          shareWindow.show();
+        }
+        $('a.share-link').click(function(event) {
+          event.preventDefault();
+          openShareWindow();
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <nav>
+      <div class="wrapper">
+        <div class="logo">
+          <a href="index.html">
+            <img src="text.jpg" alt="Temporary Logo" />
+          </a>
+        </div>
+        <ul class="nav-links">
+          <li><a href="index.html">HOME</a></li>
+        </ul>
+      </div>
+    </nav>
+    <header>
+      <div class="content">
+        <p>Welcome to</p>
+        <h1>
+          eartiaan<br />
+        </h1>
+		  <h2 class="zoom-effect">
+			  An Initiative to preserve Biodiversity using Technology<br />
+		  </h2>
+		  </br>
+    </header>
+  </body>
+  <section id="footer">
+    <div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-2 text-white">
+      <h5>Quick Links</h5>
+      <ul class="list-unstyled quick-links">
+        <li><a href="index.html"><i class="fa fa-angle-double-right"></i>HOME</a></li>
+        <li><a href="#" class="share-link"><i class="fa fa-angle-double-right"></i>Share</a></li>
+      </ul>
+    </div>
+    <hr/>
+    <div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-2 text-center text-white">
+      <p><u><a href="index.html">eartiaan</a></u> <i> is under development & will launch soon. Stay tuned !!!</i></p>
+    </div>
+  </section>
+</html>
